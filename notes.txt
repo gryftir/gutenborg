@@ -1,0 +1,28 @@
+python-crontab for setting up cron job for downloading catalog.marc.bz2
+file from project gutenburg
+Flask-RESTful and flask for rest API
+
+rest api
+
+GET books/all download complete json
+GET books/marc  download marc file
+GET books/ download most useful file data in json, title, isbn,
+author/authors, publication date
+
+can be combined:
+
+GET books/isbn=# get the book with that ISBN
+GET books/author="" get books with that author, should accept multiple
+GET books/titlestring="" get books where the title matches the string
+(implementation will depend on back end)
+
+todo:
+
+1. check Mongo vs. Postgres vs. MySQL for full text search
+2. make sure to handle Cors either with Flask Cors or 
+http://www.davidadamojr.com/handling-cors-requests-in-flask-restful-apis/
+
+
+
+
+
