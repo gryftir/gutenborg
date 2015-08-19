@@ -11,10 +11,6 @@ def download_success(in_file, out_file_name):
     return int(in_file.getcode()) == 200
 
 
-def bz2_to_file_from_url(url):
-    return urllib2.urlopen(url)
-
-
 def get_bz2_from_file(in_file, out_file_name, file_is_good):
     if not file_is_good(in_file, out_file_name):
         return False
@@ -30,8 +26,7 @@ def get_bz2_from_file(in_file, out_file_name, file_is_good):
 
 
 def main():
-    fp = bz2_to_file_from_url(
-        'http://www.gutenberg.org/feeds/catalog.marc.bz2')
+    fp = urllib2.urlopen('http://www.gutenberg.org/feeds/catalog.marc.bz2')
     result = get_bz2_from_file(fp, 'test.marc', download_success)
     print str(result)
 
