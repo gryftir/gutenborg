@@ -19,14 +19,13 @@ def get_bz2_from_file(in_file, out_file_name, file_is_good):
     if not file_is_good(in_file, out_file_name):
         return False
     bz2 = BZ2Decompressor()
-    CHUNK = 16 * 1024
+    CHUNK = 16384
     with open(out_file_name, 'wb') as fp:
         while True:
             chunk = in_file.read(CHUNK)
             if not chunk:
                 break
             fp.write(bz2.decompress(chunk))
-        fp.close()
     return True
 
 
