@@ -7,7 +7,6 @@ import unittest
 import sys
 from mock import Mock, MagicMock, mock_open, patch
 sys.path.append('../')
-sys.path.append('.../')
 from app import get_marc
 
 
