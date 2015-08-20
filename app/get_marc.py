@@ -6,6 +6,7 @@ docstring get_marc.py
 import urllib2
 from bz2 import BZ2Decompressor
 from os import remove, path
+# import sqlalchemy
 
 
 # todo add code to compare with existing file
