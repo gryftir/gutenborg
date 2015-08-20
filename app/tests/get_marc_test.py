@@ -12,7 +12,6 @@ from app import get_marc
 
 
 class marcTest(unittest.TestCase):
-
     def test_download_success(self):
         in_file = Mock()
         out_file = "test.marc"
@@ -32,11 +31,15 @@ class marcTest(unittest.TestCase):
                 foo.count += 1
                 return size
             return None
+
         foo.count = 0
         in_file.read = foo
         with patch.object(get_marc, 'BZ2Decompressor', de):
             with patch.object(get_marc, 'open', m):
-                get_marc.get_bz2_from_file(in_file, 'name', lambda x, y:  True)
+                self.assertTrue(get_marc.get_bz2_from_file(in_file, 'name',
+                                                           lambda x, y: True))
+                self.assertFalse(get_marc.get_bz2_from_file(
+                    in_file, 'name', lambda x, y: False))
         handle = m()
         self.assertEqual(handle.write.call_count, 3)
 
