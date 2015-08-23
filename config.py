@@ -13,12 +13,12 @@ load_dotenv(dotenv_path)
 
 class Config:
     SQLALCHEMY_DATABASE_URI = ''
-    pass
 
 
 class DevConfig(Config):
     DEBUG = True
-    pass
+
+
 
 config = {'development': DevConfig}
 
