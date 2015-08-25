@@ -58,7 +58,7 @@ def get_list_from_marc(in_file):
 
 
 def to_json(l):
-    return unicode(json.dumps(l, ensure_ascii=False))
+    return unicode(json.dumps(l, ensure_ascii=False, separators=(',', ':')))
 
 
 def sort_marc_title_ascending(l):
