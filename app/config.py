@@ -3,11 +3,11 @@
 docstring settings
 
 """
-from os.path import join, dirname
+from os.path import join, dirname, abspath
 from dotenv import load_dotenv
 
 
-dotenv_path = join(dirname(__file__), 'env', '.env')
+dotenv_path = abspath(join(dirname(__file__), '../env', '.env'))
 load_dotenv(dotenv_path)
 
 
@@ -17,7 +17,6 @@ class Config:
 
 class DevConfig(Config):
     DEBUG = True
-
 
 
 config = {'development': DevConfig}
