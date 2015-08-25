@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 docstring get_marc_test.py
 
@@ -39,6 +40,10 @@ class marcTest(unittest.TestCase):
                     in_file, 'name', lambda x, y: False))
         handle = m()
         self.assertEqual(handle.write.call_count, 3)
+
+    def test_to_json(self):
+        self.assertEqual(u'{"abc":1}', get_marc.to_json({'abc': 1}))
+        self.assertEqual(u'{"абвгд":1}', get_marc.to_json({u'абвгд': 1}))
 
 
 if __name__ == "__main__":
