@@ -62,5 +62,5 @@ target/
 
 #marc files
 *.marc
-
+app/static/all.json
 
