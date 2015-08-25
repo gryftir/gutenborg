@@ -19,7 +19,7 @@ def download_success(in_file, out_file_name):
 
 
 # todo add function to handle marc file and store immediately in database
-def get_bz2_from_file(in_file, out_file_name, file_is_good):
+def get_bz2_from_file(in_file, out_file_name, file_is_good=download_success):
     if not file_is_good(in_file, out_file_name):
         return False
     bz2 = BZ2Decompressor()
@@ -43,14 +43,11 @@ def get_list_from_marc(in_file):
             'author': record.author(),
             'title': record.title(),
             'isbn': record.isbn(),
-            'uniformtitle': record.uniformtitle(),
-            'notes': map(lambda x: unicode(x), record.notes()),
             'subjects': map(lambda x: unicode(x), record.subjects()),
-            'addedentries': map(lambda x: unicode(x), record.addedentries()),
-            'series': map(lambda x: unicode(x), record.series()),
             'physicaldescription': record.physicaldescription(),
             'publisher': record.publisher(),
-            'pubyear': int(record.pubyear())
+            'pubyear': int(record.pubyear()),
+            'url': record['856']['u']
         }
         d['marc_fields'] = json.loads(record.as_json())
         data.append(d)
@@ -68,12 +65,16 @@ def sort_marc_title_ascending(l):
     return sorted(l, key=lambda x: x.get('uniformtitle', x.get('title')))
 
 
+def sort_url(l):
+    return sorted(l, key=lambda x: int(x.get('url').split('/')[-1]))
+
+
 def write_str_to_file(out_file, json_str):
     out_file.write(json_str)
 
 
-def marc_to_json_format(marc_file):
-    return to_json(sort_marc_title_ascending(get_list_from_marc(marc_file)))
+def marc_to_json_format(marc_file, sort=sort_url):
+    return to_json(sort(get_list_from_marc(marc_file)))
 
 
 def write_json_to_file(marc_file, json_file):
@@ -95,6 +96,7 @@ def main():
     # fp = urllib2.urlopen('http://www.gutenberg.org/feeds/catalog.marc.bz2')
     marc = path.join(path.dirname(__file__), 'static', 'catalog.marc')
     js = path.join(path.dirname(__file__), 'static', 'all.json')
+    # if get_bz2_from_file(fp, marc):
     print marc_to_json_open(marc, js)
 
 
