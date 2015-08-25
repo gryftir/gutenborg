@@ -3,7 +3,7 @@
 docstring get_marc.py
 
 """
-import urllib2
+# import urllib2
 from bz2 import BZ2Decompressor
 from os import remove, path
 import pymarc
@@ -37,28 +37,31 @@ def get_bz2_from_file(in_file, out_file_name, file_is_good):
 
 def get_list_from_marc(in_file):
     data = []
-    reader = pymarc.MARCReader()
+    reader = pymarc.MARCReader(in_file)
     for record in reader:
-        d = {}
-        d['author'] = record.author()
-        d['title'] = record.title()
-        d['isbn'] = record.isbn()
-        d['uniformtitle'] = record.uniformtitle()
-        d['series'] = record.series()
-        d['subjects'] = record.subjects()
-        d['addedentries'] = record.addedentries()
-        d['notes'] = record.notes()
-        d['physicaldescription'] = record.physicaldescription()
-        d['publisher'] = record.publisher()
-        d['pubyear'] = record.pubyear()
-        # marc21 fields
-        d['fields'] = record.as_dict()
+        d = {
+            'author': record.author(),
+            'title': record.title(),
+            'isbn': record.isbn(),
+            'uniformtitle': record.uniformtitle(),
+            'notes': map(lambda x: unicode(x), record.notes()),
+            'subjects': map(lambda x: unicode(x), record.subjects()),
+            'addedentries': map(lambda x: unicode(x), record.addedentries()),
+            'series': map(lambda x: unicode(x), record.series()),
+            'physicaldescription': record.physicaldescription(),
+            'publisher': record.publisher(),
+            'pubyear': int(record.pubyear())
+        }
+        d['marc_fields'] = json.loads(record.as_json())
         data.append(d)
     return data
 
 
 def to_json(l):
-    return unicode(json.dumps(l, ensure_ascii=False, separators=(',', ':')))
+    return json.dumps(l,
+                      ensure_ascii=False,
+                      separators=(',', ':'),
+                      encoding='utf-8')
 
 
 def sort_marc_title_ascending(l):
@@ -89,9 +92,10 @@ def marc_to_json_open(marc_file_name, json_file_name, func=write_json_to_file):
 
 
 def main():
-    fp = urllib2.urlopen('http://www.gutenberg.org/feeds/catalog.marc.bz2')
-    result = get_bz2_from_file(fp, 'test.marc', download_success)
-    print str(result)
+    # fp = urllib2.urlopen('http://www.gutenberg.org/feeds/catalog.marc.bz2')
+    marc = path.join(path.dirname(__file__), 'static', 'catalog.marc')
+    js = path.join(path.dirname(__file__), 'static', 'all.json')
+    print marc_to_json_open(marc, js)
 
 
 if __name__ == "__main__":
