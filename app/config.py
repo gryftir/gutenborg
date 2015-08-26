@@ -5,26 +5,41 @@ docstring settings
 """
 from os.path import join, dirname, abspath
 from dotenv import load_dotenv
-
+import os
 
 dotenv_path = abspath(join(dirname(__file__), '../env', '.env'))
 load_dotenv(dotenv_path)
 
 
-class Config:
-    SQLALCHEMY_DATABASE_URI = ''
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 
-class DevConfig(Config):
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
     DEBUG = True
 
 
-config = {'development': DevConfig}
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
 
 
-def main():
-    pass
+class TestingConfig(Config):
+    TESTING = True
 
-if __name__ == "__main__":
-    main()
-    pass
+
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'staging': StagingConfig,
+    'testing': TestingConfig
+}
