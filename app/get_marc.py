@@ -44,8 +44,6 @@ def get_list_from_marc(in_file):
             'title': record.title(),
             'isbn': record.isbn(),
             'subjects': map(lambda x: unicode(x), record.subjects()),
-            'physicaldescription': record.physicaldescription(),
-            'publisher': record.publisher(),
             'pubyear': int(record.pubyear()),
             'url': record['856']['u']
         }
