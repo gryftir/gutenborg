@@ -42,11 +42,14 @@ def get_list_from_marc(in_file):
         d = {
             'author': record.author(),
             'title': record.title(),
-            'isbn': record.isbn(),
-            'subjects': map(lambda x: unicode(x), record.subjects()),
-            'pubyear': int(record.pubyear()),
             'url': record['856']['u']
+            # TODO get isbn and pubyear if one exists, api?
+            # 'isbn': record.isbn(),
+
         }
+
+        d['subjects'] = unicode(', '.join([s['a'] for s in record.subjects()
+                                           if 'a' in s]))
         d['marc_fields'] = json.loads(record.as_json())
         data.append(d)
     return data
