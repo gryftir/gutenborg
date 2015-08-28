@@ -6,7 +6,8 @@ import config
 
 app = Flask(__name__, static_url_path='')
 # api = Api(app)
-app.config.from_object(config.config['development'])
+configuration = config.DevelopmentConfig()
+app.config.from_object(configuration)
 
 from app import routes
 

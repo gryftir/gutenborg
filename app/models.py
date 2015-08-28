@@ -3,11 +3,9 @@
 docstring app/models.py
 
 """
+from app import app
+from flask_restful import reqparse, abort, Api, Resource
 
 
-def main():
-    pass
 
-if __name__ == "__main__":
-    main()
-    pass
+
